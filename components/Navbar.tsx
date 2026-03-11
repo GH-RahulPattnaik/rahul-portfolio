@@ -1,9 +1,9 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import { useTheme } from '@/components/Themeprovider';
+import Image from 'next/image';
 
-const navLinks = [
+const links = [
   { label: 'About',      href: '#about' },
   { label: 'Skills',     href: '#skills' },
   { label: 'Experience', href: '#experience' },
@@ -13,96 +13,95 @@ const navLinks = [
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
-  const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled,  setScrolled]  = useState(false);
+  const [open,      setOpen]      = useState(false);
+  const [isMobile,  setIsMobile]  = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  useEffect(() => {
+    const fn = () => setScrolled(window.scrollY > 30);
+    window.addEventListener('scroll', fn);
+    return () => window.removeEventListener('scroll', fn);
+  }, []);
+
+  // Close menu on resize to desktop
+  useEffect(() => {
+    if (!isMobile) setOpen(false);
+  }, [isMobile]);
 
   return (
     <header style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-      backgroundColor: scrolled ? 'var(--nav-bg)' : 'transparent',
-      borderBottom: scrolled ? '1px solid var(--border)' : '1px solid transparent',
-      backdropFilter: scrolled ? 'blur(14px)' : 'none',
-      transition: 'all 0.3s ease',
+      background: 'var(--nav-bg)',
+      borderBottom: scrolled ? '2px solid var(--border)' : '2px solid transparent',
+      backdropFilter: 'blur(12px)',
+      transition: 'border-color 0.3s',
     }}>
-      <nav style={{
-        maxWidth: '1200px', margin: '0 auto', padding: '0 1.5rem',
+      <div style={{
+        maxWidth: '1280px', margin: '0 auto', padding: '0 1.5rem',
         height: '72px', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
 
         {/* Logo */}
-        <a href="#hero" style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text)', textDecoration: 'none', letterSpacing: '-0.02em' }}>
-          Rahul<span style={{ color: 'var(--accent)' }}>.</span>
+        <a href="#hero" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ width: '42px', height: '42px', borderRadius: '50%', overflow: 'hidden', border: '2px solid var(--accent)', flexShrink: 0, position: 'relative' }}>
+            <Image src="/avatar.png" alt="Rahul Pattnaik" width={42} height={42} style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+          </div>
+          <span className="gs-display" style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.02em' }}>
+            Rahul Pattnaik
+          </span>
         </a>
 
-        {/* Desktop links */}
-        <ul className="hidden md:flex" style={{ display: 'flex', gap: '2.5rem', listStyle: 'none', alignItems: 'center' }}>
-          {navLinks.map(link => (
-            <li key={link.label}>
-              <a
-                href={link.href}
-                className="font-mono"
-                style={{ fontSize: '0.78rem', textDecoration: 'none', color: 'var(--text-muted)', letterSpacing: '0.06em', textTransform: 'uppercase', transition: 'color 0.2s' }}
-                onMouseEnter={e => (e.currentTarget.style.color = 'var(--accent)')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}
-              >
-                {link.label}
-              </a>
-            </li>
+        {/* Desktop nav */}
+        {!isMobile && (
+          <nav style={{ display: 'flex', gap: '0', alignItems: 'center' }}>
+            {links.map(l => (
+              <a key={l.label} href={l.href} className="gs-mono"
+                style={{ padding: '0.4rem 1.1rem', fontSize: '0.72rem', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)', textDecoration: 'none', borderRight: '1px solid var(--border-light)', transition: 'all 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'var(--hover)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.background = 'transparent'; }}
+              >{l.label}</a>
+            ))}
+            <button onClick={toggleTheme} className="gs-mono"
+              style={{ marginLeft: '1.2rem', padding: '0.4rem 1rem', fontSize: '0.72rem', letterSpacing: '0.1em', textTransform: 'uppercase', border: '2px solid var(--border)', background: 'transparent', color: 'var(--text)', cursor: 'pointer', transition: 'all 0.2s', fontFamily: 'inherit' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'var(--accent)'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
+            >{theme === 'dark' ? '☀ Light' : '◑ Dark'}</button>
+          </nav>
+        )}
+
+        {/* Mobile controls */}
+        {isMobile && (
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+            <button onClick={toggleTheme}
+              style={{ padding: '0.35rem 0.8rem', border: '2px solid var(--border)', background: 'transparent', color: 'var(--text)', cursor: 'pointer', fontSize: '0.7rem', fontFamily: 'inherit' }}
+            >{theme === 'dark' ? '☀' : '◑'}</button>
+            <button onClick={() => setOpen(!open)}
+              style={{ padding: '0.35rem 0.8rem', border: '2px solid var(--border)', background: open ? 'var(--accent)' : 'transparent', color: open ? '#fff' : 'var(--text)', cursor: 'pointer', fontFamily: 'inherit', fontSize: '0.7rem', letterSpacing: '0.08em', transition: 'all 0.2s' }}
+            >{open ? '✕ Close' : '☰ Menu'}</button>
+          </div>
+        )}
+      </div>
+
+      {/* Mobile menu dropdown */}
+      {isMobile && open && (
+        <div style={{ borderTop: '2px solid var(--border)', background: 'var(--bg)' }}>
+          {links.map(l => (
+            <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="gs-mono"
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 1.5rem', borderBottom: '1px solid var(--border-light)', fontSize: '0.78rem', letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none', color: 'var(--text-muted)', transition: 'all 0.15s' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'var(--hover)'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.paddingLeft = '2rem'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.paddingLeft = '1.5rem'; }}
+            >
+              {l.label}
+              <span style={{ fontSize: '0.65rem', opacity: 0.5 }}>→</span>
+            </a>
           ))}
-        </ul>
-
-        {/* Right controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          {/* Theme toggle */}
-          <button
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-            style={{ width: '38px', height: '38px', borderRadius: '50%', border: '1px solid var(--border)', background: 'var(--bg-secondary)', color: 'var(--text)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', transition: 'border-color 0.2s' }}
-          >
-            {theme === 'dark' ? '☀' : '◑'}
-          </button>
-
-          {/* Hamburger */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-            className="flex md:hidden"
-            style={{ width: '38px', height: '38px', border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '5px', borderRadius: '6px' }}
-          >
-            {[0, 1, 2].map(i => (
-              <span key={i} style={{
-                display: 'block', width: '16px', height: '2px', background: 'var(--text)', transition: 'all 0.3s',
-                opacity: menuOpen && i === 1 ? 0 : 1,
-                transform: menuOpen ? i === 0 ? 'translateY(7px) rotate(45deg)' : i === 2 ? 'translateY(-7px) rotate(-45deg)' : 'none' : 'none',
-              }} />
-            ))}
-          </button>
-        </div>
-      </nav>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="md:hidden" style={{ background: 'var(--bg)', borderTop: '1px solid var(--border)', padding: '1.5rem' }}>
-          <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-            {navLinks.map(link => (
-              <li key={link.label}>
-                <a
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="font-mono"
-                  style={{ fontSize: '0.82rem', textDecoration: 'none', color: 'var(--text-muted)', letterSpacing: '0.08em', textTransform: 'uppercase' }}
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
         </div>
       )}
     </header>

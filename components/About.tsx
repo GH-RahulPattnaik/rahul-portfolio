@@ -1,64 +1,82 @@
 'use client';
-
-const stats = [
-  { value: '2+',  label: 'Years Experience' },
-  { value: '3+',  label: 'Projects Built'   },
-  { value: '5',   label: 'Shopify Templates' },
-  { value: '4',   label: 'Languages Spoken' },
-];
+import Image from 'next/image';
 
 export default function About() {
   return (
-    <section id="about" style={{ padding: '6rem 1.5rem', maxWidth: '1200px', margin: '0 auto' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', alignItems: 'start' }}>
+    <section id="about" style={{ background: 'var(--bg-alt)', borderTop: '2px solid var(--border)', padding: '5rem 1.5rem' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
 
-        {/* Left */}
-        <div>
-          <p className="font-mono" style={{ fontSize: '0.72rem', letterSpacing: '0.15em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '0.75rem' }}>01 — About</p>
-          <h2 style={{ fontSize: 'clamp(2.4rem, 6vw, 4rem)', lineHeight: 1, fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--text)', marginBottom: '2rem' }}>Who I Am</h2>
-
-          {/* Stats */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1px', background: 'var(--border)', border: '1px solid var(--border)' }}>
-            {stats.map(stat => (
-              <div key={stat.label} style={{ background: 'var(--bg)', padding: '1.5rem' }}>
-                <div style={{ fontSize: '2.2rem', fontWeight: 700, color: 'var(--accent)', lineHeight: 1, marginBottom: '0.3rem' }}>{stat.value}</div>
-                <div className="font-mono" style={{ fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>{stat.label}</div>
-              </div>
-            ))}
-          </div>
+        {/* Section header */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '3.5rem' }}>
+          <span className="gs-mono" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'var(--accent)', textTransform: 'uppercase' }}>01 / About</span>
+          <div style={{ flex: 1, height: '2px', background: 'var(--border)' }} />
+          <h2 className="gs-display" style={{ fontSize: 'clamp(1.8rem, 5vw, 3.5rem)', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.03em', lineHeight: 1 }}>
+            Who I Am
+          </h2>
         </div>
 
-        {/* Right */}
-        <div>
-          {[
-            "I'm a dedicated UI Developer with hands-on experience building and deploying engaging web applications. I completed my B.Tech in Electrical & Computer Engineering from Gandhi Institute for Education & Technology, Khurda.",
-            null,
-            "Currently at Bluecorp Software Pvt Ltd, I build intuitive interfaces for vehicle marketplace platforms — Bike Central and Car Central — managing data pipelines and implementing seamless API integrations.",
-          ].map((para, i) =>
-            para ? (
-              <p key={i} style={{ lineHeight: 1.85, color: 'var(--text-muted)', marginBottom: '1.4rem', fontSize: '1rem' }}
-                dangerouslySetInnerHTML={{ __html: para.replace('Bluecorp Software Pvt Ltd', '<strong style="color:var(--text)">Bluecorp Software Pvt Ltd</strong>') }}
-              />
-            ) : null
-          )}
-          <p style={{ lineHeight: 1.85, color: 'var(--text-muted)', fontSize: '1rem' }}>
-            Fluent in {['Odia','Hindi','Tamil','English'].map((l,i,a) => <span key={l}><span style={{ color: 'var(--text)' }}>{l}</span>{i < a.length-1 ? ', ' : ''}</span>)} and always eager to take on new challenges in dynamic environments.
-          </p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', alignItems: 'start' }}>
 
-          {/* Links */}
-          <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem', flexWrap: 'wrap' }}>
-            {[
-              { label: 'LinkedIn ↗', href: 'https://www.linkedin.com/in/rahul-pattnaik-9016241b0/' },
-              { label: 'GitHub ↗',   href: 'https://github.com/GH-RahulPattnaik' },
-            ].map(link => (
-              <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="font-mono"
-                style={{ fontSize: '0.76rem', color: 'var(--text-muted)', textDecoration: 'none', letterSpacing: '0.06em', borderBottom: '1px solid var(--border)', paddingBottom: '2px', transition: 'color 0.2s, border-color 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
-              >
-                {link.label}
-              </a>
-            ))}
+          {/* Left – photo */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div className="hover-lift" style={{ position: 'relative', aspectRatio: '4/5', border: '2px solid var(--border)', overflow: 'hidden' }}>
+              <Image src="/about-pic.jpg" alt="Rahul Pattnaik" fill style={{ objectFit: 'cover' }} />
+              {/* Accent strip */}
+              <div style={{ position: 'absolute', top: 0, left: 0, width: '6px', height: '100%', background: 'var(--accent)' }} />
+            </div>
+
+            {/* Location + links */}
+            <div style={{ border: '2px solid var(--border)', padding: '1.2rem', background: 'var(--bg)' }}>
+              <p className="gs-mono" style={{ fontSize: '0.65rem', color: 'var(--accent)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Connect</p>
+              {[
+                { l: 'LinkedIn ↗', h: 'https://www.linkedin.com/in/rahul-pattnaik-9016241b0/' },
+                { l: 'GitHub ↗',   h: 'https://github.com/GH-RahulPattnaik' },
+                { l: 'Email ↗',    h: 'https://mail.google.com/mail/?view=cm&to=rpattnaik2001@gmail.com&su=Hello Rahul — Let\'s Connect&body=Hi Rahul,%0A%0AI came across your portfolio and would like to get in touch.' },
+              ].map(link => (
+                <a key={link.l} href={link.h} target="_blank" rel="noopener noreferrer" className="gs-mono"
+                  style={{ display: 'flex', justifyContent: 'space-between', padding: '0.55rem 0', borderBottom: '1px solid var(--border-light)', fontSize: '0.82rem', color: 'var(--text)', textDecoration: 'none', transition: 'color 0.2s, padding-left 0.2s' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.paddingLeft = '0.5rem'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.paddingLeft = '0'; }}
+                >{link.l}</a>
+              ))}
+            </div>
+          </div>
+
+          {/* Right – bio */}
+          <div>
+            <p style={{ fontSize: '1.05rem', lineHeight: 1.85, color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
+              I&apos;m a dedicated UI Developer with hands-on experience building and deploying engaging web applications. I hold a B.Tech in Electrical &amp; Computer Engineering from Gandhi Institute for Education &amp; Technology, Khurda.
+            </p>
+            <p style={{ fontSize: '1.05rem', lineHeight: 1.85, color: 'var(--text-muted)', marginBottom: '2.5rem' }}>
+              Currently at <strong style={{ color: 'var(--text)' }}>Bluecorp Software Pvt Ltd</strong>, I develop intuitive interfaces for Bike Central and Car Central — vehicle marketplace platforms — while managing MongoDB data and implementing seamless API integrations.
+            </p>
+
+            {/* Stat row */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: 'var(--border)', border: '2px solid var(--border)', marginBottom: '2.5rem' }}>
+              {[['2+', 'Years Experience'], ['3+', 'Projects Built'], ['5', 'Shopify Templates'], ['4', 'Languages Spoken']].map(([n, l]) => (
+                <div key={l} style={{ background: 'var(--bg)', padding: '1.25rem', cursor: 'default', transition: 'background 0.2s' }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'var(--accent)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'var(--bg)')}
+                >
+                  <span className="gs-display" style={{ display: 'block', fontSize: '2.2rem', fontWeight: 700, color: 'var(--text)', lineHeight: 1, marginBottom: '0.2rem' }}>{n}</span>
+                  <span className="gs-mono" style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{l}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Languages */}
+            <div>
+              <p className="gs-mono" style={{ fontSize: '0.65rem', color: 'var(--accent)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '0.75rem' }}>Languages Spoken</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                {['Odia', 'Hindi', 'Tamil', 'English'].map(lang => (
+                  <span key={lang} className="gs-mono"
+                    style={{ padding: '0.4rem 1rem', border: '2px solid var(--border)', fontSize: '0.8rem', color: 'var(--text)', background: 'var(--bg)', cursor: 'default', transition: 'all 0.2s' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLSpanElement).style.background = 'var(--accent)'; (e.currentTarget as HTMLSpanElement).style.borderColor = 'var(--accent)'; (e.currentTarget as HTMLSpanElement).style.color = '#fff'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLSpanElement).style.background = 'var(--bg)'; (e.currentTarget as HTMLSpanElement).style.borderColor = 'var(--border)'; (e.currentTarget as HTMLSpanElement).style.color = 'var(--text)'; }}
+                  >{lang}</span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
