@@ -14,6 +14,7 @@ export default function Skills() {
     <section id="skills" style={{ background: 'var(--bg)', borderTop: '2px solid var(--border)', padding: '5rem 1.5rem' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
 
+        {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '3.5rem' }}>
           <span className="gs-mono" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'var(--accent)', textTransform: 'uppercase' }}>02 / Skills</span>
           <div style={{ flex: 1, height: '2px', background: 'var(--border)' }} />
@@ -22,20 +23,31 @@ export default function Skills() {
           </h2>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '2px', background: 'var(--border)' }}>
-          {groups.map(g => (
-            <div key={g.cat}
-              style={{ background: 'var(--bg)', padding: '1.75rem', transition: 'background 0.2s', cursor: 'default' }}
+        {/* Grid — NO gap, use borders only so no background bleeds through */}
+        <div style={{ border: '2px solid var(--border)', display: 'flex', flexWrap: 'wrap' }}>
+          {groups.map((g) => (
+            <div
+              key={g.cat}
+              style={{
+                flex: '1 1 220px',
+                background: 'var(--bg)',
+                padding: '1.75rem',
+                borderRight: '1px solid var(--border-light)',
+                borderBottom: '1px solid var(--border-light)',
+                transition: 'background 0.2s',
+                cursor: 'default',
+              }}
               onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-alt)')}
               onMouseLeave={e => (e.currentTarget.style.background = 'var(--bg)')}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.1rem' }}>
-                <div style={{ width: '6px', height: '6px', background: 'var(--accent)' }} />
+                <div style={{ width: '6px', height: '6px', background: 'var(--accent)', flexShrink: 0 }} />
                 <span className="gs-mono" style={{ fontSize: '0.62rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--accent)' }}>{g.cat}</span>
               </div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
                 {g.items.map(item => (
-                  <span key={item}
+                  <span
+                    key={item}
                     style={{ padding: '0.3rem 0.7rem', border: '1.5px solid var(--border-light)', fontSize: '0.85rem', color: 'var(--text)', background: 'var(--bg)', cursor: 'default', transition: 'all 0.18s' }}
                     onMouseEnter={e => { (e.currentTarget as HTMLSpanElement).style.background = 'var(--accent)'; (e.currentTarget as HTMLSpanElement).style.color = '#fff'; (e.currentTarget as HTMLSpanElement).style.borderColor = 'var(--accent)'; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLSpanElement).style.background = 'var(--bg)'; (e.currentTarget as HTMLSpanElement).style.color = 'var(--text)'; (e.currentTarget as HTMLSpanElement).style.borderColor = 'var(--border-light)'; }}
