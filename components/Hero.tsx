@@ -63,7 +63,7 @@ export default function Hero() {
           {/* Photo */}
           <div className="anim d2 hidden md:block" style={{ display: 'block' }}>
             <div className="hover-lift" style={{ width: '200px', aspectRatio: '3/4', position: 'relative', border: '2px solid var(--border)', overflow: 'hidden' }}>
-              <Image src="/hero-pic.png" alt="Rahul Pattnaik" fill style={{ objectFit: 'cover' }} priority />
+              <Image src="/hero-photo-white-bg.png" alt="Rahul Pattnaik" fill style={{ objectFit: 'cover' }} priority />
               {/* Red/blue corner tag */}
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'var(--accent)', padding: '0.4rem 0.6rem' }}>
                 <span className="gs-mono" style={{ fontSize: '0.6rem', color: '#fff', letterSpacing: '0.1em', textTransform: 'uppercase' }}>UI Developer</span>
