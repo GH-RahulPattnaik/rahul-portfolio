@@ -209,12 +209,8 @@ export default function Hero() {
                 alt="Rahul Pattnaik"
                 fill
                 className="object-cover object-top"
-                style={{ filter: 'grayscale(15%) contrast(1.05)' }}
                 priority
               />
-
-              {/* Overlay gradient */}
-              <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
             </div>
 
             {/* Open to work badge */}

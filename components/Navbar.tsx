@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 const navLinks = [
   { label: 'About',      href: '#about' },
@@ -56,12 +57,10 @@ export default function Navbar() {
     <>
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'border-b backdrop-blur-xl'
-            : 'border-b border-transparent'
+          scrolled ? 'border-b backdrop-blur-xl' : 'border-b border-transparent'
         }`}
         style={{
-          background: scrolled ? 'var(--bg)' : 'transparent',
+          background:  scrolled ? 'var(--bg)' : 'transparent',
           borderColor: scrolled ? 'var(--border)' : 'transparent',
         }}
       >
@@ -71,17 +70,30 @@ export default function Navbar() {
           <a
             href="#"
             onClick={e => scrollTo(e, '#hero')}
-            className="no-underline flex items-center"
-            style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '1.25rem',
-              fontWeight: 800,
-              color: 'var(--text-1)',
-              letterSpacing: '-0.02em',
-            }}
+            className={`no-underline flex items-center gap-2.5 shrink-0 transition-all duration-300 ${
+              scrolled ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
           >
-            Rahul
-            <span style={{ color: 'var(--accent)' }}>.</span>
+            <div
+              className="relative w-9 h-9 rounded-full overflow-hidden shrink-0 bg-transparent"
+              style={{ border: '2px solid var(--accent)' }}
+            >
+              <Image
+                src="/avatar.png"
+                alt="Rahul"
+                fill
+                className="object-cover object-top"
+              />
+            </div>
+            <span
+              className="font-bold text-xl tracking-tight"
+              style={{
+                fontFamily: 'var(--font-body)',
+                color:      'var(--text-1)',
+              }}
+            >
+              Rahul<span style={{ color: 'var(--accent)' }}>.</span>
+            </span>
           </a>
 
           {/* Desktop nav */}
@@ -94,14 +106,20 @@ export default function Navbar() {
                   href={link.href}
                   onClick={e => scrollTo(e, link.href)}
                   className={`text-sm px-3 py-2 rounded-md no-underline transition-all duration-200 ${
-                    isActive
-                      ? 'font-semibold'
-                      : 'font-normal hover:opacity-100'
+                    isActive ? 'font-semibold' : 'font-normal'
                   }`}
                   style={{
                     fontFamily: 'var(--font-body)',
                     color:      isActive ? 'var(--accent)' : 'var(--text-2)',
                     background: isActive ? 'var(--accent-dim)' : 'transparent',
+                  }}
+                  onMouseEnter={e => {
+                    if (!isActive)
+                      (e.currentTarget as HTMLElement).style.color = 'var(--text-1)';
+                  }}
+                  onMouseLeave={e => {
+                    if (!isActive)
+                      (e.currentTarget as HTMLElement).style.color = 'var(--text-2)';
                   }}
                 >
                   {link.label}
@@ -117,6 +135,14 @@ export default function Navbar() {
                 border:     '1px solid var(--border-2)',
                 background: 'transparent',
                 color:      'var(--text-2)',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)';
+                (e.currentTarget as HTMLElement).style.color = 'var(--accent)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-2)';
+                (e.currentTarget as HTMLElement).style.color = 'var(--text-2)';
               }}
               aria-label="Toggle theme"
             >
@@ -148,6 +174,7 @@ export default function Navbar() {
               {theme === 'dark' ? '☀' : '☾'}
             </button>
 
+            {/* Hamburger */}
             <button
               onClick={() => setMenuOpen(v => !v)}
               className="w-9 h-9 rounded-lg flex flex-col items-center justify-center gap-1.25 cursor-pointer"
@@ -193,9 +220,10 @@ export default function Navbar() {
                 key={i}
                 href={link.href}
                 onClick={e => scrollTo(e, link.href)}
-                className="no-underline py-3 border-b text-[1.4rem] font-bold tracking-tight transition-colors duration-200"
+                className="no-underline py-3 border-b font-bold tracking-tight transition-colors duration-200"
                 style={{
-                  fontFamily:  'var(--font-display)',
+                  fontFamily:  'var(--font-body)',
+                  fontSize:    '1.4rem',
                   color:       active === link.href.replace('#', '') ? 'var(--accent)' : 'var(--text-1)',
                   borderColor: 'var(--border)',
                 }}

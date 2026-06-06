@@ -1,414 +1,243 @@
 'use client';
 
-const projects = [
-  {
-    id:          '01',
-    title:       'DreamPitch',
-    subtitle:    'Interactive Sales Deck — American Dream Mall',
-    description: 'A premium interactive sales deck for American Dream Mall — 3 million sq. ft., 70% entertainment focus. Showcases retail leasing, sponsorship and event booking opportunities with animated sections and live CTA integrations. Built in 3 days with AI assistance.',
-    liveUrl:     'https://dream-pitch.vercel.app/',
-    repoUrl:     '',
-    stack:       ['Next.js', 'Tailwind CSS', 'Framer Motion', 'Vercel'],
-    type:        'Featured',
-    featured:    true,
-    stats:       [{ label: 'Built in', value: '3 days' }, { label: 'Sections', value: '7+' }, { label: 'AI-assisted', value: 'Yes' }],
-  },
-  {
-    id:          '02',
-    title:       'Bike Central',
-    subtitle:    'Live Vehicle Marketplace',
-    description: 'Production vehicle marketplace platform live at bikecentral.in. Handles listings, search, filters, user auth and real-time data sync. 12+ features shipped end-to-end, achieving 30% faster load times.',
-    liveUrl:     'https://www.bikecentral.in/',
-    repoUrl:     '',
-    stack:       ['Next.js', 'Node.js', 'MongoDB', 'TypeScript', 'Tailwind CSS', 'JWT'],
-    type:        'Production',
-    featured:    false,
-    stats:       [{ label: 'APIs', value: '15+' }, { label: 'Perf gain', value: '30%' }, { label: 'Status', value: 'Live' }],
-  },
-  {
-    id:          '03',
-    title:       'Car Central',
-    subtitle:    'Vehicle Marketplace Platform',
-    description: 'Car marketplace companion to Bike Central. Migrated from MongoDB to PostgreSQL with Prisma ORM for type-safe queries. Implemented RBAC, JWT sessions and full-stack responsive UI.',
-    liveUrl:     '',
-    repoUrl:     '',
-    stack:       ['Next.js', 'PostgreSQL', 'Prisma', 'Express.js', 'TypeScript', 'Tailwind CSS'],
-    type:        'Production',
-    featured:    false,
-    stats:       [{ label: 'DB migration', value: 'Done' }, { label: 'RBAC', value: 'Yes' }, { label: 'ORM', value: 'Prisma' }],
-  },
-  {
-    id:          '04',
-    title:       'Template One',
-    subtitle:    'Internship UI Template — Bluecorp',
-    description: 'A responsive modern UI template designed and developed during my internship at Bluecorp Software. Demonstrates component architecture, Tailwind CSS design systems and clean layout patterns.',
-    liveUrl:     'https://temp-one-one.vercel.app/',
-    repoUrl:     '',
-    stack:       ['Next.js', 'React', 'Tailwind CSS'],
-    type:        'Internship',
-    featured:    false,
-    stats:       [],
-  },
-  {
-    id:          '05',
-    title:       'Template Two',
-    subtitle:    'Internship UI Template — Bluecorp',
-    description: 'Second UI template built during internship — explores a different visual direction with advanced layout compositions, dark-mode design tokens and reusable section patterns.',
-    liveUrl:     'https://temp-two-drab.vercel.app/',
-    repoUrl:     '',
-    stack:       ['Next.js', 'React', 'Tailwind CSS'],
-    type:        'Internship',
-    featured:    false,
-    stats:       [],
-  },
-  {
-    id:          '06',
-    title:       'Portfolio v1',
-    subtitle:    'Personal Portfolio Website',
-    description: 'My previous personal portfolio built with Next.js, TypeScript and Tailwind CSS v4. Dark themed with a clean layout showcasing experience, projects and skills.',
-    liveUrl:     'https://rahul-portfolio-gules-xi.vercel.app/',
-    repoUrl:     '',
-    stack:       ['Next.js', 'TypeScript', 'Tailwind CSS v4'],
-    type:        'Personal',
-    featured:    false,
-    stats:       [],
-  },
+import { useState, useEffect } from 'react';
+
+const navLinks = [
+  { label: 'About',      href: '#about' },
+  { label: 'Skills',     href: '#skills' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Projects',   href: '#projects' },
+  { label: 'Contact',    href: '#contact' },
 ];
 
-const typeStyle = (type: string) => {
-  switch (type) {
-    case 'Featured':    return { background: 'var(--accent-dim)', border: '1px solid var(--accent-dim)', color: 'var(--accent)' };
-    case 'Production':  return { background: 'var(--accent-dim)', border: '1px solid var(--accent-dim)', color: 'var(--accent)' };
-    case 'Internship':  return { background: 'var(--bg-2)',       border: '1px solid var(--border)',     color: 'var(--text-2)' };
-    case 'Personal':    return { background: 'var(--bg-2)',       border: '1px solid var(--border)',     color: 'var(--text-2)' };
-    default:            return {};
-  }
-};
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [active, setActive]     = useState('');
+  const [theme, setTheme]       = useState('dark');
 
-export default function Projects() {
+  useEffect(() => {
+    const saved = localStorage.getItem('theme') || 'dark';
+    setTheme(saved);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => { if (e.isIntersecting) setActive(e.target.id); }),
+      { rootMargin: '-40% 0px -55% 0px' }
+    );
+    navLinks.forEach(l => {
+      const el = document.getElementById(l.href.replace('#', ''));
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    localStorage.setItem('theme', next);
+    document.documentElement.setAttribute('data-theme', next);
+  };
+
+  const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setMenuOpen(false);
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <section id="projects" className="section">
-      <div className="container">
+    <>
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled ? 'border-b backdrop-blur-xl' : 'border-b border-transparent'
+        }`}
+        style={{
+          background:  scrolled ? 'var(--bg)' : 'transparent',
+          borderColor: scrolled ? 'var(--border)' : 'transparent',
+        }}
+      >
+        <div className="max-w-280 mx-auto px-6 h-16 flex items-center justify-between">
 
-        {/* Header */}
-        <div className="section-header">
-          <div className="label">04 — Projects</div>
-          <h2 className="display-lg mt-3">
-            Things I&apos;ve Built<span style={{ color: 'var(--accent)' }}>.</span>
-          </h2>
-        </div>
-
-        {/* Featured project */}
-        {projects.filter(p => p.featured).map(project => (
-          <div
-            key={project.id}
-            className="card rounded-2xl p-8 mb-5"
-            style={{
-              borderColor: 'var(--accent)',
-              boxShadow:   '0 0 0 1px var(--accent-dim), 0 8px 40px var(--accent-dim)',
-            }}
+          {/* Logo */}
+          <a
+            href="#"
+            onClick={e => scrollTo(e, '#hero')}
+            className="no-underline flex items-center gap-2"
           >
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-10 items-start">
-
-              {/* Left */}
-              <div>
-                <div className="flex items-center gap-3 mb-4 flex-wrap">
-                  <span
-                    className="text-xs"
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      color:      'var(--text-3)',
-                    }}
-                  >
-                    {project.id}
-                  </span>
-                  <span className="badge" style={typeStyle(project.type)}>
-                    ★ {project.type}
-                  </span>
-                </div>
-
-                <h3
-                  className="text-4xl font-bold tracking-tight mb-1"
-                  style={{
-                    fontFamily: 'var(--font-display)',
-                    color:      'var(--text-1)',
-                  }}
-                >
-                  {project.title}
-                </h3>
-                <div
-                  className="text-sm mb-5"
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    color:      'var(--accent)',
-                  }}
-                >
-                  {project.subtitle}
-                </div>
-
-                <p
-                  className="text-base leading-8 mb-6 max-w-lg"
-                  style={{ color: 'var(--text-2)' }}
-                >
-                  {project.description}
-                </p>
-
-                {/* Stats */}
-                {project.stats.length > 0 && (
-                  <div className="flex gap-8 mb-6 flex-wrap">
-                    {project.stats.map((s, si) => (
-                      <div key={si}>
-                        <div
-                          className="text-2xl font-bold mb-0.5"
-                          style={{
-                            fontFamily: 'var(--font-display)',
-                            color:      'var(--accent)',
-                          }}
-                        >
-                          {s.value}
-                        </div>
-                        <div
-                          className="text-xs tracking-widest uppercase"
-                          style={{
-                            fontFamily: 'var(--font-mono)',
-                            color:      'var(--text-3)',
-                          }}
-                        >
-                          {s.label}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-
-                {/* Stack */}
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {project.stack.map((tech, ti) => (
-                    <span
-                      key={ti}
-                      className="badge badge-muted"
-                      style={{ fontFamily: 'var(--font-mono)' }}
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Links */}
-                <div className="flex gap-3 flex-wrap">
-                  {project.liveUrl && (
-                    <a
-                      href={project.liveUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-solid"
-                    >
-                      Live Demo ↗
-                    </a>
-                  )}
-                  {project.repoUrl && (
-                    <a
-                      href={project.repoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn btn-ghost"
-                    >
-                      GitHub ↗
-                    </a>
-                  )}
-                </div>
-              </div>
-
-              {/* Right — visual card */}
-              <div
-                className="hidden lg:flex flex-col rounded-xl overflow-hidden"
-                style={{
-                  background: 'var(--bg-2)',
-                  border:     '1px solid var(--border)',
-                }}
-              >
-                {/* Window bar */}
-                <div
-                  className="flex items-center gap-2 px-4 py-3"
-                  style={{ borderBottom: '1px solid var(--border)' }}
-                >
-                  {['#EF4444', '#F59E0B', '#22C55E'].map((c, i) => (
-                    <span
-                      key={i}
-                      className="w-2.5 h-2.5 rounded-full"
-                      style={{ background: c, opacity: 0.8 }}
-                    />
-                  ))}
-                  <span
-                    className="ml-2 text-xs"
-                    style={{
-                      fontFamily: 'var(--font-mono)',
-                      color:      'var(--text-3)',
-                    }}
-                  >
-                    dream-pitch.vercel.app
-                  </span>
-                </div>
-
-                {/* Content */}
-                <div className="p-5 flex flex-col gap-2">
-                  {[
-                    { c: 'var(--accent)',  t: '$ npm run build' },
-                    { c: 'var(--text-3)', t: 'Creating optimized build...' },
-                    { c: 'var(--accent)',  t: '✓ Compiled successfully' },
-                    { c: 'var(--text-3)', t: '○ Generating static pages' },
-                    { c: 'var(--accent)',  t: '✓ Build completed in 2.4s' },
-                    { c: 'var(--text-3)', t: '$ vercel deploy --prod' },
-                    { c: 'var(--accent)',  t: '✓ Deployed to production' },
-                  ].map((line, i) => (
-                    <div
-                      key={i}
-                      className="text-xs"
-                      style={{
-                        fontFamily: 'var(--font-mono)',
-                        color:      line.c,
-                      }}
-                    >
-                      {line.t}
-                    </div>
-                  ))}
-                  <div className="flex items-center gap-1 mt-1">
-                    <span
-                      className="text-xs"
-                      style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}
-                    >
-                      $
-                    </span>
-                    <span className="cursor-blink" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-
-        {/* Other projects grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {projects.filter(p => !p.featured).map(project => (
             <div
-              key={project.id}
-              className="card rounded-2xl p-6 flex flex-col"
+              className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white shrink-0"
+              style={{ background: 'var(--accent)' }}
             >
-              {/* Top */}
-              <div className="flex items-center justify-between mb-5">
-                <span
-                  className="text-xs"
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    color:      'var(--text-3)',
-                  }}
-                >
-                  {project.id}
-                </span>
-                <span className="badge" style={typeStyle(project.type)}>
-                  {project.type}
-                </span>
-              </div>
-
-              <h3
-                className="text-lg font-bold tracking-tight mb-1"
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  color:      'var(--text-1)',
-                }}
-              >
-                {project.title}
-              </h3>
-
-              <div
-                className="text-xs mb-4"
-                style={{
-                  fontFamily: 'var(--font-mono)',
-                  color:      'var(--accent)',
-                }}
-              >
-                {project.subtitle}
-              </div>
-
-              <p
-                className="text-sm leading-7 mb-5 flex-1"
-                style={{ color: 'var(--text-2)' }}
-              >
-                {project.description}
-              </p>
-
-              {/* Stats */}
-              {project.stats.length > 0 && (
-                <div
-                  className="flex gap-5 mb-5 pb-5"
-                  style={{ borderBottom: '1px solid var(--border)' }}
-                >
-                  {project.stats.map((s, si) => (
-                    <div key={si}>
-                      <div
-                        className="text-lg font-bold"
-                        style={{
-                          fontFamily: 'var(--font-display)',
-                          color:      'var(--accent)',
-                        }}
-                      >
-                        {s.value}
-                      </div>
-                      <div
-                        className="text-[10px] tracking-wider uppercase"
-                        style={{
-                          fontFamily: 'var(--font-mono)',
-                          color:      'var(--text-3)',
-                        }}
-                      >
-                        {s.label}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Stack */}
-              <div className="flex flex-wrap gap-1.5 mb-5">
-                {project.stack.map((tech, ti) => (
-                  <span
-                    key={ti}
-                    className="badge badge-muted text-[10px]"
-                    style={{ fontFamily: 'var(--font-mono)' }}
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-
-              {/* Link */}
-              {project.liveUrl ? (
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-sm font-medium transition-all duration-200 group w-fit"
-                  style={{ color: 'var(--accent)', textDecoration: 'none' }}
-                >
-                  View Live
-                  <span className="transition-transform duration-200 group-hover:translate-x-1">↗</span>
-                </a>
-              ) : (
-                <span
-                  className="text-xs"
-                  style={{
-                    fontFamily: 'var(--font-mono)',
-                    color:      'var(--text-3)',
-                  }}
-                >
-                  Internal / Private
-                </span>
-              )}
+              R
             </div>
-          ))}
+            <span
+              className="flex items-center"
+              style={{
+                fontFamily:    'var(--font-display)',
+                fontSize:      '1.4rem',
+                fontWeight:    800,
+                color:         'var(--text-1)',
+                letterSpacing: '-0.03em',
+              }}
+            >
+              Rahul
+              <span style={{ color: 'var(--accent)', fontSize: '2rem', lineHeight: 1 }}>.</span>
+            </span>
+          </a>
+
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-1">
+            {navLinks.map((link, i) => {
+              const isActive = active === link.href.replace('#', '');
+              return (
+                <a
+                  key={i}
+                  href={link.href}
+                  onClick={e => scrollTo(e, link.href)}
+                  className={`text-sm px-3 py-2 rounded-md no-underline transition-all duration-200 ${
+                    isActive ? 'font-semibold' : 'font-normal'
+                  }`}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    color:      isActive ? 'var(--accent)' : 'var(--text-2)',
+                    background: isActive ? 'var(--accent-dim)' : 'transparent',
+                  }}
+                  onMouseEnter={e => {
+                    if (!isActive)
+                      (e.currentTarget as HTMLElement).style.color = 'var(--text-1)';
+                  }}
+                  onMouseLeave={e => {
+                    if (!isActive)
+                      (e.currentTarget as HTMLElement).style.color = 'var(--text-2)';
+                  }}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
+
+            {/* Theme toggle */}
+            <button
+              onClick={toggleTheme}
+              className="ml-2 w-9 h-9 rounded-lg flex items-center justify-center text-base transition-all duration-200 cursor-pointer"
+              style={{
+                border:     '1px solid var(--border-2)',
+                background: 'transparent',
+                color:      'var(--text-2)',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)';
+                (e.currentTarget as HTMLElement).style.color = 'var(--accent)';
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as HTMLElement).style.borderColor = 'var(--border-2)';
+                (e.currentTarget as HTMLElement).style.color = 'var(--text-2)';
+              }}
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? '☀' : '☾'}
+            </button>
+
+            {/* Resume */}
+            <a
+              href="/Rahul_Pattnaik_CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-solid ml-2 text-sm px-4 py-2"
+            >
+              Résumé ↗
+            </a>
+          </div>
+
+          {/* Mobile right */}
+          <div className="flex md:hidden items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              className="w-9 h-9 rounded-lg flex items-center justify-center text-base cursor-pointer"
+              style={{
+                border:     '1px solid var(--border-2)',
+                background: 'transparent',
+                color:      'var(--text-2)',
+              }}
+            >
+              {theme === 'dark' ? '☀' : '☾'}
+            </button>
+
+            {/* Hamburger */}
+            <button
+              onClick={() => setMenuOpen(v => !v)}
+              className="w-9 h-9 rounded-lg flex flex-col items-center justify-center gap-1.25 cursor-pointer"
+              style={{
+                border:     '1px solid var(--border-2)',
+                background: 'transparent',
+              }}
+              aria-label="Toggle menu"
+            >
+              {[0, 1, 2].map(i => (
+                <span
+                  key={i}
+                  className="block w-4 rounded-sm transition-all duration-200"
+                  style={{
+                    height:     '1.5px',
+                    background: menuOpen
+                      ? i === 1 ? 'transparent' : 'var(--accent)'
+                      : 'var(--text-2)',
+                    transform: menuOpen
+                      ? i === 0 ? 'translateY(6.5px) rotate(45deg)'
+                      : i === 2 ? 'translateY(-6.5px) rotate(-45deg)'
+                      : 'none'
+                      : 'none',
+                  }}
+                />
+              ))}
+            </button>
+          </div>
         </div>
 
-      </div>
-    </section>
+        {/* Mobile menu */}
+        <div
+          className="overflow-hidden transition-all duration-300"
+          style={{
+            maxHeight:  menuOpen ? '400px' : '0',
+            background: 'var(--bg)',
+            borderTop:  menuOpen ? '1px solid var(--border)' : 'none',
+          }}
+        >
+          <div className="px-6 pt-5 pb-6 flex flex-col gap-1">
+            {navLinks.map((link, i) => (
+              <a
+                key={i}
+                href={link.href}
+                onClick={e => scrollTo(e, link.href)}
+                className="no-underline py-3 border-b font-bold tracking-tight transition-colors duration-200"
+                style={{
+                  fontFamily:  'var(--font-display)',
+                  fontSize:    '1.4rem',
+                  color:       active === link.href.replace('#', '') ? 'var(--accent)' : 'var(--text-1)',
+                  borderColor: 'var(--border)',
+                }}
+              >
+                {link.label}
+              </a>
+            ))}
+            <a
+              href="/Rahul_Pattnaik_CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-solid mt-4 justify-center"
+            >
+              Résumé ↗
+            </a>
+          </div>
+        </div>
+      </nav>
+    </>
   );
 }
