@@ -1,62 +1,267 @@
 'use client';
 
-const contacts = [
-  { label: 'Email',    value: 'rpattnaik2001@gmail.com',  href: 'https://mail.google.com/mail/?view=cm&to=rpattnaik2001@gmail.com&su=Hello Rahul — Let\'s Connect' },
-  { label: 'Phone',    value: '+91 9940751910',            href: 'tel:+919940751910' },
-  { label: 'LinkedIn', value: 'rahul-pattnaik',           href: 'https://www.linkedin.com/in/rahul-pattnaik-9016241b0/' },
-  { label: 'GitHub',   value: 'GH-RahulPattnaik',         href: 'https://github.com/GH-RahulPattnaik' },
+import { useState } from 'react';
+
+const contactLinks = [
+  {
+    label: 'Email',
+    value: 'rpattnaik2001@gmail.com',
+    href:  'mailto:rpattnaik2001@gmail.com',
+    icon:  '✉',
+  },
+  {
+    label: 'LinkedIn',
+    value: 'linkedin.com/in/rahul-pattnaik-9016241b0/',
+    href:  'https://www.linkedin.com/in/rahul-pattnaik-9016241b0/',
+    icon:  '⬡',
+  },
+  {
+    label: 'GitHub',
+    value: 'github.com/GH-RahulPattnaik',
+    href:  'https://github.com/GH-RahulPattnaik',
+    icon:  '◈',
+  },
+  {
+    label: 'Location',
+    value: 'Berhampur, Odisha · Remote OK',
+    href:  '',
+    icon:  '◎',
+  },
 ];
 
 export default function Contact() {
-  return (
-    <section id="contact" style={{ background: 'var(--bg-alt)', borderTop: '2px solid var(--border)', padding: '5rem 1.5rem' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+  const [copied, setCopied] = useState(false);
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '3.5rem' }}>
-          <span className="gs-mono" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'var(--accent)', textTransform: 'uppercase' }}>05 / Contact</span>
-          <div style={{ flex: 1, height: '2px', background: 'var(--border)' }} />
-          <h2 className="gs-display" style={{ fontSize: 'clamp(1.8rem, 5vw, 3.5rem)', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.03em', lineHeight: 1 }}>
-            Get In Touch
+  const copyEmail = () => {
+    navigator.clipboard.writeText('rpattnaik2001@gmail.com');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <section id="contact" className="section">
+      <div className="container">
+
+        {/* Header */}
+        <div className="section-header">
+          <div className="label">05 — Contact</div>
+          <h2 className="display-lg mt-3">
+            Get In Touch<span style={{ color: 'var(--accent)' }}>.</span>
           </h2>
         </div>
 
-        {/* Big CTA */}
-        <div style={{ border: '2px solid var(--border)', padding: '3rem 2rem', marginBottom: '2rem', textAlign: 'center', background: 'var(--bg)', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: 0, left: 0, width: '6px', height: '100%', background: 'var(--accent)' }} />
-          <h3 className="gs-display" style={{ fontSize: 'clamp(2.5rem, 8vw, 6rem)', fontWeight: 700, lineHeight: 0.9, letterSpacing: '-0.04em', color: 'var(--text)', marginBottom: '1.2rem' }}>
-            Let&apos;s Build<br />
-            <span style={{ WebkitTextStroke: '2px var(--text)', color: 'transparent' }}>Together.</span>
-          </h3>
-          <p style={{ fontSize: '1rem', color: 'var(--text-muted)', maxWidth: '440px', margin: '0 auto 2rem', lineHeight: 1.7 }}>
-            Open to full-time roles, freelance projects and interesting collaborations. Remote-friendly, open to relocation.
-          </p>
-          <a href="https://mail.google.com/mail/?view=cm&to=rpattnaik2001@gmail.com&su=Hello Rahul — Let's Connect" target="_blank" rel="noopener noreferrer" className="gs-mono hover-lift"
-            style={{ display: 'inline-block', padding: '0.9rem 2.5rem', background: 'var(--text)', color: 'var(--bg)', border: '2px solid var(--border)', textDecoration: 'none', fontSize: '0.78rem', letterSpacing: '0.12em', textTransform: 'uppercase', transition: 'all 0.2s' }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'var(--accent)'; e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = '#fff'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'var(--text)'; e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--bg)'; }}
-          >Send Me an Email →</a>
-        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
 
-        {/* Contact cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2px', background: 'var(--border)', border: '2px solid var(--border)' }}>
-          {contacts.map(c => (
-            <a key={c.label} href={c.href}
-              target={c.href.startsWith('http') ? '_blank' : undefined}
-              rel={c.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-              style={{ display: 'block', padding: '1.5rem', background: 'var(--bg)', textDecoration: 'none', transition: 'background 0.2s', borderTop: '3px solid transparent' }}
-              onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'var(--accent)'; (e.currentTarget as HTMLAnchorElement).style.borderTopColor = 'var(--border)'; (e.currentTarget as HTMLAnchorElement).querySelectorAll('p').forEach(p => (p as HTMLElement).style.color = '#fff'); }}
-              onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = 'var(--bg)'; (e.currentTarget as HTMLAnchorElement).style.borderTopColor = 'transparent'; (e.currentTarget as HTMLAnchorElement).querySelectorAll('p').forEach(p => (p as HTMLElement).style.color = ''); }}
+          {/* Left — message + CTA */}
+          <div className="flex flex-col gap-8">
+
+            {/* Heading */}
+            <div>
+              <p className="text-base leading-8 mb-4" style={{ color: 'var(--text-2)' }}>
+                I&apos;m currently open to{' '}
+                <span className="font-semibold" style={{ color: 'var(--text-1)' }}>
+                  full-time remote roles
+                </span>{' '}
+                and select freelance projects. If you have a high-ownership
+                position in a product team — or just want to talk tech —
+                my inbox is open.
+              </p>
+              <p className="text-base leading-8" style={{ color: 'var(--text-2)' }}>
+                Targeting roles in{' '}
+                <span className="font-semibold" style={{ color: 'var(--accent)' }}>
+                  Pune · Remote · WFH
+                </span>{' '}
+                with a minimum of{' '}
+                <span className="font-bold" style={{ color: 'var(--text-1)' }}>
+                  24 LPA
+                </span>
+                . Immediately available for remote — 1–2 months notice for on-site.
+              </p>
+            </div>
+
+            {/* Email copy */}
+            <div
+              className="flex items-stretch rounded-xl overflow-hidden"
+              style={{ border: '1px solid var(--border-2)' }}
             >
-              <p className="gs-mono" style={{ fontSize: '0.6rem', color: 'var(--accent)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.4rem' }}>{c.label}</p>
-              <p style={{ fontSize: '0.88rem', color: 'var(--text)', wordBreak: 'break-all' }}>{c.value}</p>
-            </a>
-          ))}
+              <div
+                className="flex-1 px-4 py-3 text-sm"
+                style={{
+                  fontFamily:  'var(--font-mono)',
+                  color:       'var(--text-2)',
+                  background:  'var(--bg-card)',
+                  borderRight: '1px solid var(--border)',
+                }}
+              >
+                rpattnaik2001@gmail.com
+              </div>
+              <button
+                onClick={copyEmail}
+                className="px-4 py-3 text-xs font-medium transition-all duration-200 cursor-pointer"
+                style={{
+                  fontFamily:  'var(--font-mono)',
+                  background:  copied ? 'var(--accent-dim)' : 'transparent',
+                  color:       copied ? 'var(--accent)' : 'var(--text-3)',
+                  border:      'none',
+                  whiteSpace:  'nowrap',
+                }}
+              >
+                {copied ? '✓ Copied' : 'Copy'}
+              </button>
+            </div>
+
+            {/* CTA buttons */}
+            <div className="flex gap-3 flex-wrap">
+              <a
+                href="mailto:rpattnaik2001@gmail.com"
+                className="btn btn-solid"
+              >
+                Send Email ↗
+              </a>
+              <a
+                href="/Rahul_Pattnaik_CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-ghost"
+              >
+                Download CV ↗
+              </a>
+            </div>
+
+            {/* Availability card */}
+            <div
+              className="rounded-xl p-4 flex items-center gap-3"
+              style={{
+                background: 'var(--accent-dim)',
+                border:     '1px solid var(--accent-dim)',
+              }}
+            >
+              <div className="relative shrink-0">
+                <span
+                  className="w-2.5 h-2.5 rounded-full block"
+                  style={{ background: 'var(--accent)' }}
+                />
+                <span
+                  className="absolute inset-0 rounded-full animate-ping"
+                  style={{ background: 'var(--accent)', opacity: 0.4 }}
+                />
+              </div>
+              <p
+                className="text-sm leading-relaxed"
+                style={{ color: 'var(--text-2)' }}
+              >
+                <span className="font-semibold" style={{ color: 'var(--accent)' }}>
+                  Available now
+                </span>{' '}
+                for remote roles · 1–2 months notice for on-site ·{' '}
+                <span style={{ color: 'var(--text-1)' }}>Min 24 LPA</span>
+              </p>
+            </div>
+          </div>
+
+          {/* Right — contact links card */}
+          <div className="card rounded-2xl overflow-hidden">
+
+            {/* Card header */}
+            <div
+              className="px-6 py-4 flex items-center justify-between"
+              style={{ borderBottom: '1px solid var(--border)' }}
+            >
+              <span
+                className="text-xs tracking-widest uppercase"
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  color:      'var(--text-3)',
+                }}
+              >
+                contact.info
+              </span>
+              <div className="flex items-center gap-1.5">
+                {['#EF4444', '#F59E0B', '#22C55E'].map((c, i) => (
+                  <span
+                    key={i}
+                    className="w-2.5 h-2.5 rounded-full"
+                    style={{ background: c, opacity: 0.7 }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Links */}
+            <div className="p-6 flex flex-col">
+              {contactLinks.map((link, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-4 py-4"
+                  style={{
+                    borderBottom: i < contactLinks.length - 1
+                      ? '1px solid var(--border)'
+                      : 'none',
+                  }}
+                >
+                  {/* Icon */}
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center text-base shrink-0"
+                    style={{
+                      background: 'var(--accent-dim)',
+                      color:      'var(--accent)',
+                      border:     '1px solid var(--accent-dim)',
+                    }}
+                  >
+                    {link.icon}
+                  </div>
+
+                  {/* Info */}
+                  <div className="flex flex-col flex-1 min-w-0">
+                    <span
+                      className="text-xs tracking-widest uppercase mb-0.5"
+                      style={{
+                        fontFamily: 'var(--font-mono)',
+                        color:      'var(--text-3)',
+                      }}
+                    >
+                      {link.label}
+                    </span>
+                    {link.href ? (
+                      <a
+                        href={link.href}
+                        target={link.href.startsWith('mailto') ? '_self' : '_blank'}
+                        rel="noopener noreferrer"
+                        className="text-sm font-medium truncate transition-colors duration-200 no-underline"
+                        style={{ color: 'var(--text-1)' }}
+                        onMouseEnter={e => {
+                          (e.currentTarget as HTMLAnchorElement).style.color = 'var(--accent)';
+                        }}
+                        onMouseLeave={e => {
+                          (e.currentTarget as HTMLAnchorElement).style.color = 'var(--text-1)';
+                        }}
+                      >
+                        {link.value}
+                      </a>
+                    ) : (
+                      <span
+                        className="text-sm font-medium"
+                        style={{ color: 'var(--text-1)' }}
+                      >
+                        {link.value}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Arrow */}
+                  {link.href && (
+                    <span
+                      className="text-sm shrink-0"
+                      style={{ color: 'var(--text-3)' }}
+                    >
+                      ↗
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
-
-        <p className="gs-mono" style={{ marginTop: '1.5rem', fontSize: '0.68rem', color: 'var(--text-faint)', textAlign: 'center', letterSpacing: '0.08em' }}>
-          📍 Berhampur, Odisha, India — Open to Remote & Relocation
-        </p>
-
       </div>
     </section>
   );

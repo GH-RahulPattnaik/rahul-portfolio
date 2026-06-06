@@ -1,121 +1,262 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-const roles = ['UI Developer', 'React Developer', 'Next.js Engineer', 'Full-Stack Dev'];
-const skills = ['Next.js', 'React.js', 'Tailwind CSS', 'MongoDB', 'TypeScript', 'Node.js', 'REST APIs', 'Git'];
+const roles = [
+  'Full Stack Developer',
+  'Next.js Engineer',
+  'UI Developer',
+  'Flutter Developer',
+];
 
 export default function Hero() {
-  const [ri, setRi]     = useState(0);
-  const [text, setText] = useState('');
-  const [fwd, setFwd]   = useState(true);
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayed, setDisplayed] = useState('');
+  const [deleting, setDeleting]   = useState(false);
+  const [charIndex, setCharIndex] = useState(0);
 
   useEffect(() => {
-    const cur = roles[ri];
-    if (fwd) {
-      if (text.length < cur.length) {
-        const t = setTimeout(() => setText(cur.slice(0, text.length + 1)), 75);
-        return () => clearTimeout(t);
-      } else {
-        const t = setTimeout(() => setFwd(false), 1800);
-        return () => clearTimeout(t);
-      }
-    } else {
-      if (text.length > 0) {
-        const t = setTimeout(() => setText(t => t.slice(0, -1)), 45);
-        return () => clearTimeout(t);
-      } else {
-        setRi(p => (p + 1) % roles.length);
-        setFwd(true);
-      }
+    const current = roles[roleIndex];
+    if (!deleting && charIndex < current.length) {
+      const t = setTimeout(() => {
+        setDisplayed(current.slice(0, charIndex + 1));
+        setCharIndex(c => c + 1);
+      }, 65);
+      return () => clearTimeout(t);
     }
-  }, [text, fwd, ri]);
+    if (!deleting && charIndex === current.length) {
+      const t = setTimeout(() => setDeleting(true), 2000);
+      return () => clearTimeout(t);
+    }
+    if (deleting && charIndex > 0) {
+      const t = setTimeout(() => {
+        setDisplayed(current.slice(0, charIndex - 1));
+        setCharIndex(c => c - 1);
+      }, 35);
+      return () => clearTimeout(t);
+    }
+    if (deleting && charIndex === 0) {
+      setDeleting(false);
+      setRoleIndex(r => (r + 1) % roles.length);
+    }
+  }, [charIndex, deleting, roleIndex]);
 
   return (
-    <section id="hero" style={{ background: 'var(--bg)', paddingTop: '72px', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <section
+      id="hero"
+      className="relative min-h-screen flex items-center px-6 pt-16 overflow-hidden"
+    >
+      {/* Background accent blob */}
+      <div
+        className="absolute top-1/4 right-0 w-150 h-150 rounded-full pointer-events-none opacity-[0.04] blur-[120px]"
+        style={{ background: 'var(--accent)' }}
+      />
+      <div
+        className="absolute bottom-0 left-0 w-100 h-100 rounded-full pointer-events-none opacity-[0.03] blur-[100px]"
+        style={{ background: 'var(--accent)' }}
+      />
 
-      {/* Main content */}
-      <div style={{ flex: 1, maxWidth: '1280px', margin: '0 auto', width: '100%', padding: '4rem 1.5rem 2rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '2.5rem' }}>
+      <div className="max-w-280 mx-auto w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-16 items-center">
 
-        {/* Top row */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '2rem', alignItems: 'start' }}>
-          {/* Name block */}
+          {/* Left */}
           <div>
-            <div className="anim d1" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.2rem' }}>
-              <div style={{ width: '36px', height: '3px', background: 'var(--accent)' }} />
-              <span className="gs-mono" style={{ fontSize: '0.7rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--accent)' }}>Available for work</span>
-            </div>
 
-            <h1 className="gs-display anim d2" style={{ fontSize: 'clamp(3.5rem, 11vw, 8.5rem)', fontWeight: 700, lineHeight: 0.88, letterSpacing: '-0.04em', color: 'var(--text)' }}>
-              Rahul<br />
-              <span style={{ WebkitTextStroke: '2px var(--text)', color: 'transparent' }}>Pattnaik</span>
-            </h1>
-
-            {/* Role typewriter */}
-            <div className="anim d3" style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <div style={{ width: '2px', height: '2.2rem', background: 'var(--accent)' }} />
-              <span className="gs-mono" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.4rem)', color: 'var(--text-muted)', minWidth: '240px' }}>
-                {text}<span className="blink" style={{ color: 'var(--accent)' }}>_</span>
+            {/* Available badge */}
+            <div className="animate-fade-up flex items-center gap-2 mb-8 w-fit">
+              <span
+                className="relative flex h-2 w-2"
+              >
+                <span
+                  className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                  style={{ background: 'var(--accent)' }}
+                />
+                <span
+                  className="relative inline-flex rounded-full h-2 w-2"
+                  style={{ background: 'var(--accent)' }}
+                />
+              </span>
+              <span
+                className="text-xs font-medium tracking-widest uppercase"
+                style={{
+                  fontFamily: 'var(--font-mono)',
+                  color:      'var(--text-2)',
+                }}
+              >
+                Available for hire
               </span>
             </div>
-          </div>
 
-          {/* Photo */}
-          <div className="anim d2 hidden md:block" style={{ display: 'block' }}>
-            <div className="hover-lift" style={{ width: '200px', aspectRatio: '3/4', position: 'relative', border: '2px solid var(--border)', overflow: 'hidden' }}>
-              <Image src="/hero-photo-white-bg.png" alt="Rahul Pattnaik" fill style={{ objectFit: 'cover' }} priority />
-              {/* Red/blue corner tag */}
-              <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'var(--accent)', padding: '0.4rem 0.6rem' }}>
-                <span className="gs-mono" style={{ fontSize: '0.6rem', color: '#fff', letterSpacing: '0.1em', textTransform: 'uppercase' }}>UI Developer</span>
-              </div>
+            {/* Name */}
+            <h1
+              className="animate-fade-up delay-1 mb-4 leading-none"
+              style={{
+                fontFamily:    'var(--font-body)',
+                fontSize:      'clamp(3rem, 8vw, 6rem)',
+                fontWeight:    700,
+                letterSpacing: '-0.04em',
+                color:         'var(--text-1)',
+                lineHeight:    1,
+              }}
+            >
+              Rahul<br />
+              <span style={{ color: 'var(--accent)' }}>Pattnaik</span>
+            </h1>
+
+            {/* Typewriter */}
+            <div
+              className="animate-fade-up delay-2 flex items-center gap-2 mb-6"
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize:   'clamp(1rem, 2.5vw, 1.25rem)',
+                color:      'var(--text-2)',
+              }}
+            >
+              <span style={{ color: 'var(--accent)' }}>~/</span>
+              <span>{displayed}</span>
+              <span className="cursor-blink" />
+            </div>
+
+            {/* Bio */}
+            <p
+              className="animate-fade-up delay-3 mb-10 max-w-130 text-base leading-8"
+              style={{ color: 'var(--text-2)' }}
+            >
+              2.5+ years building production-grade apps with{' '}
+              <span
+                className="font-semibold"
+                style={{ color: 'var(--text-1)' }}
+              >
+                Next.js, React & Node.js
+              </span>
+              . Reduced load times by 30%, shipped 15+ APIs, and integrated
+              AI into real products. Open to high-ownership remote roles.
+            </p>
+
+            {/* CTA */}
+            <div className="animate-fade-up delay-4 flex gap-3 flex-wrap mb-14">
+              <a
+                href="#projects"
+                className="btn btn-solid"
+                onClick={e => {
+                  e.preventDefault();
+                  document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                View Projects →
+              </a>
+              <a
+                href="#contact"
+                className="btn btn-ghost"
+                onClick={e => {
+                  e.preventDefault();
+                  document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                Get In Touch
+              </a>
+            </div>
+
+            {/* Stats */}
+            <div className="animate-fade-up delay-5 flex gap-10 flex-wrap">
+              {[
+                { value: '2.5+', label: 'Years Exp' },
+                { value: '12+',  label: 'Features Shipped' },
+                { value: '15+',  label: 'APIs Built' },
+                { value: '30%',  label: 'Perf Gain' },
+              ].map((stat, i) => (
+                <div key={i}>
+                  <div
+                    className="font-bold leading-none mb-1"
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize:   'clamp(1.5rem, 3vw, 2rem)',
+                      color:      'var(--accent)',
+                    }}
+                  >
+                    {stat.value}
+                  </div>
+                  <div
+                    className="text-xs tracking-widest uppercase"
+                    style={{
+                      fontFamily: 'var(--font-mono)',
+                      color:      'var(--text-3)',
+                    }}
+                  >
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* Bio + stats */}
-        <div className="anim d4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2rem', borderTop: '2px solid var(--border)', paddingTop: '2rem' }}>
-          <p style={{ fontSize: '1rem', lineHeight: 1.8, color: 'var(--text-muted)', maxWidth: '480px' }}>
-            Building responsive, intuitive web interfaces with Next.js &amp; React.
-            Currently at <strong style={{ color: 'var(--text)' }}>Bluecorp Software</strong>, Hyderabad.
-            Based in <strong style={{ color: 'var(--text)' }}>Berhampur, Odisha</strong>.
-          </p>
+          {/* Right — Photo */}
+          <div className="hidden lg:block relative w-70 h-90 shrink-0">
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1px', background: 'var(--border)' }}>
-            {[['2+', 'Years exp'], ['3+', 'Projects'], ['5', 'Templates'], ['4', 'Languages']].map(([n, l]) => (
-              <div key={l} style={{ background: 'var(--bg)', padding: '1rem', transition: 'background 0.2s' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = 'var(--accent)'; (e.currentTarget as HTMLDivElement).querySelectorAll('span').forEach((s: Element) => (s as HTMLElement).style.color = '#fff'); }}
-                onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = 'var(--bg)'; (e.currentTarget as HTMLDivElement).querySelectorAll('span').forEach((s: Element) => (s as HTMLElement).style.color = ''); }}
-              >
-                <span className="gs-display" style={{ display: 'block', fontSize: '2rem', fontWeight: 700, color: 'var(--text)', lineHeight: 1 }}>{n}</span>
-                <span className="gs-mono" style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{l}</span>
-              </div>
-            ))}
+            {/* Accent border frame */}
+            <div
+              className="absolute inset-0 rounded-2xl translate-x-3 translate-y-3"
+              style={{ border: '2px solid var(--accent)', opacity: 0.3 }}
+            />
+
+            {/* Photo */}
+            <div className="relative w-full h-full rounded-2xl overflow-hidden"
+              style={{ border: '1px solid var(--border-2)' }}
+            >
+              <Image
+                src="/hero-pic.png"
+                alt="Rahul Pattnaik"
+                fill
+                className="object-cover object-top"
+                style={{ filter: 'grayscale(15%) contrast(1.05)' }}
+                priority
+              />
+
+              {/* Overlay gradient */}
+              <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
+            </div>
+
+            {/* Open to work badge */}
+            <div
+              className="absolute -bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-full text-xs whitespace-nowrap"
+              style={{
+                fontFamily:  'var(--font-mono)',
+                background:  'var(--bg-card)',
+                border:      '1px solid var(--border-2)',
+                color:       'var(--text-2)',
+              }}
+            >
+              <span
+                className="w-2 h-2 rounded-full shrink-0"
+                style={{
+                  background: 'var(--accent)',
+                  boxShadow:  '0 0 6px var(--accent)',
+                }}
+              />
+              Open to work
+            </div>
           </div>
-        </div>
 
-        {/* CTAs */}
-        <div className="anim d5" style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-          {[{ l: 'View Projects →', h: '#projects', fill: true }, { l: 'Get In Touch →', h: '#contact', fill: false }].map(b => (
-            <a key={b.l} href={b.h} className="gs-mono hover-lift"
-              style={{ padding: '0.85rem 2rem', background: b.fill ? 'var(--text)' : 'transparent', color: b.fill ? 'var(--bg)' : 'var(--text)', border: '2px solid var(--border)', textDecoration: 'none', fontSize: '0.78rem', letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'background 0.2s, color 0.2s, border-color 0.2s' }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'var(--accent)'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = b.fill ? 'var(--text)' : 'transparent'; e.currentTarget.style.color = b.fill ? 'var(--bg)' : 'var(--text)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
-            >{b.l}</a>
-          ))}
         </div>
       </div>
 
-      {/* Skills marquee strip */}
-      <div style={{ borderTop: '2px solid var(--border)', overflow: 'hidden', background: 'var(--bg-alt)', padding: '0.85rem 0' }}>
-        <div className="marquee-track">
-          {[...skills, ...skills].map((s, i) => (
-            <span key={i} className="gs-mono" style={{ fontSize: '0.72rem', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--text-muted)', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              <span style={{ color: 'var(--accent)', fontSize: '0.5rem' }}>◆</span>{s}
-            </span>
-          ))}
-        </div>
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+        <span
+          className="text-[0.6rem] tracking-[0.2em] uppercase"
+          style={{
+            fontFamily: 'var(--font-mono)',
+            color:      'var(--text-3)',
+          }}
+        >
+          scroll
+        </span>
+        <div
+          className="w-px h-8"
+          style={{ background: 'linear-gradient(to bottom, var(--accent), transparent)' }}
+        />
       </div>
-
     </section>
   );
 }

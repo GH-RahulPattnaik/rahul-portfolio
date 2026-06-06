@@ -1,91 +1,195 @@
 'use client';
 
-const work = [
+const experiences = [
   {
-    role: 'UI Developer', company: 'Bluecorp Software Pvt Ltd', location: 'Hyderabad',
-    period: 'Jun 2024 — Present', type: 'Full-Time', current: true,
+    role:     'Full Stack Developer / UI Developer',
+    company:  'Bluecorp Software Pvt Ltd',
+    location: 'Hyderabad',
+    period:   'Jun 2024 – Present',
+    type:     'Full-time',
+    current:  true,
     points: [
-      'Manages and integrates project data for Bike Central and Car Central vehicle marketplace products within MongoDB.',
-      'Develops intuitive and responsive interfaces using Next.js and Tailwind CSS.',
-      'Implements API integrations enhancing platform functionality and user experience.',
+      'Owned and shipped 12+ production features end-to-end for vehicle marketplace platforms (Bike Central, Car Central), reducing page load time by 30% and increasing user engagement by 25%.',
+      'Built and integrated 15+ RESTful APIs using Node.js, Express.js and TypeScript; designed MongoDB schemas and migrated one project to PostgreSQL with Prisma ORM for type-safe database operations.',
+      'Collaborated daily with product and design teams to deliver responsive, pixel-perfect UI components with Tailwind CSS and shadcn-inspired patterns.',
+      'Implemented JWT authentication, role-based access control and real-time data syncing; debugged production issues across the full stack to ensure 99.9% reliability.',
+      'Participated in Agile sprints, code reviews and CI/CD pipelines on Vercel; introduced performance monitoring with Core Web Vitals.',
     ],
+    stack: ['Next.js', 'React', 'Node.js', 'TypeScript', 'MongoDB', 'PostgreSQL', 'Prisma', 'Tailwind CSS', 'Vercel'],
   },
   {
-    role: 'Intern', company: 'Bluecorp Software Pvt Ltd', location: 'Hyderabad',
-    period: 'Dec 2023 — Jun 2024', type: 'Internship', current: false,
+    role:     'UI Developer Intern',
+    company:  'Bluecorp Software Pvt Ltd',
+    location: 'Hyderabad',
+    period:   'Dec 2023 – Jun 2024',
+    type:     'Internship',
+    current:  false,
     points: [
-      'Gained hands-on experience in Next.js for UI development, API design, and MongoDB.',
-      'Developed a foundational understanding of full-stack development and data handling.',
+      'Shipped responsive UI components used by real customers from day one; built a reusable component library that accelerated feature development by 40%.',
+      'Gained production expertise in full-stack JavaScript, API design patterns and NoSQL data modeling while working directly with senior engineers.',
     ],
+    stack: ['React', 'JavaScript', 'Tailwind CSS', 'Node.js', 'MongoDB'],
   },
-];
-
-const edu = [
-  { deg: 'B.Tech — Electrical & Computer Engineering', inst: 'Gandhi Institute for Education & Technology, Khurda', yr: '2019 — 2023' },
-  { deg: 'Higher Secondary Education', inst: 'Sri Kumaran Hr Sec School', yr: '2017 — 2019' },
-  { deg: 'Matriculation', inst: 'Bala Bhavan Global School', yr: '2016 — 2017' },
 ];
 
 export default function Experience() {
   return (
-    <section id="experience" style={{ background: 'var(--bg-alt)', borderTop: '2px solid var(--border)', padding: '5rem 1.5rem' }}>
-      <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+    <section id="experience" className="section">
+      <div className="container">
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '3.5rem' }}>
-          <span className="gs-mono" style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'var(--accent)', textTransform: 'uppercase' }}>03 / Experience</span>
-          <div style={{ flex: 1, height: '2px', background: 'var(--border)' }} />
-          <h2 className="gs-display" style={{ fontSize: 'clamp(1.8rem, 5vw, 3.5rem)', fontWeight: 700, color: 'var(--text)', letterSpacing: '-0.03em', lineHeight: 1 }}>
-            Where I&apos;ve Worked
+        {/* Header */}
+        <div className="section-header">
+          <div className="label">03 — Experience</div>
+          <h2 className="display-lg mt-3">
+            Work History<span style={{ color: 'var(--accent)' }}>.</span>
           </h2>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem' }}>
+        {/* Timeline */}
+        <div className="relative">
 
-          {/* Work */}
-          <div>
-            <p className="gs-mono" style={{ fontSize: '0.62rem', letterSpacing: '0.15em', color: 'var(--text-faint)', textTransform: 'uppercase', marginBottom: '2rem', borderBottom: '2px solid var(--border)', paddingBottom: '0.6rem' }}>Work History</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
-              {work.map((w, i) => (
-                <div key={i} className="hover-lift" style={{ border: '2px solid var(--border)', padding: '1.5rem', background: 'var(--bg)', borderLeft: `5px solid ${w.current ? 'var(--accent)' : 'var(--border)'}` }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '0.3rem' }}>
-                    <h3 className="gs-display" style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text)' }}>{w.role}</h3>
-                    <span className="gs-mono" style={{ fontSize: '0.6rem', padding: '0.2rem 0.6rem', border: `1.5px solid ${w.current ? 'var(--accent)' : 'var(--border-light)'}`, color: w.current ? 'var(--accent)' : 'var(--text-muted)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                      {w.current ? '● ' : ''}{w.type}
-                    </span>
+          {/* Vertical line */}
+          <div
+            className="absolute left-1.75 top-2 bottom-2 w-px hidden md:block"
+            style={{
+              background: 'linear-gradient(to bottom, var(--accent), var(--border), transparent)',
+            }}
+          />
+
+          <div className="flex flex-col gap-8">
+            {experiences.map((exp, i) => (
+              <div key={i} className="flex gap-8">
+
+                {/* Dot */}
+                <div className="relative hidden md:flex flex-col items-center shrink-0 pt-1">
+                  <div
+                    className="w-4 h-4 rounded-full shrink-0 relative z-10"
+                    style={{
+                      background:  exp.current ? 'var(--accent)' : 'var(--bg-card)',
+                      border:      `2px solid ${exp.current ? 'var(--accent)' : 'var(--border-2)'}`,
+                      boxShadow:   exp.current ? '0 0 16px var(--accent-glow)' : 'none',
+                    }}
+                  >
+                    {exp.current && (
+                      <span
+                        className="absolute inset-0 rounded-full animate-ping"
+                        style={{
+                          background: 'var(--accent)',
+                          opacity:    0.3,
+                        }}
+                      />
+                    )}
                   </div>
-                  <p className="gs-mono" style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginBottom: '0.2rem' }}>{w.company} · {w.location}</p>
-                  <p className="gs-mono" style={{ fontSize: '0.7rem', color: 'var(--accent)', marginBottom: '1rem' }}>{w.period}</p>
-                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
-                    {w.points.map((pt, j) => (
-                      <li key={j} style={{ display: 'flex', gap: '0.6rem', alignItems: 'flex-start' }}>
-                        <span style={{ color: 'var(--accent)', flexShrink: 0, fontSize: '0.65rem', marginTop: '0.3rem' }}>◆</span>
-                        <span style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.7 }}>{pt}</span>
+                </div>
+
+                {/* Card */}
+                <div
+                  className="card rounded-2xl p-7 flex-1"
+                  style={{
+                    borderColor: exp.current ? 'var(--accent)' : 'var(--border)',
+                    boxShadow:   exp.current
+                      ? '0 0 0 1px var(--accent-dim), 0 8px 40px var(--accent-dim)'
+                      : 'none',
+                  }}
+                >
+                  {/* Top row */}
+                  <div className="flex flex-wrap items-start justify-between gap-4 mb-5">
+                    <div>
+                      <h3
+                        className="text-xl font-bold tracking-tight mb-1"
+                        style={{
+                          fontFamily: 'var(--font-display)',
+                          color:      'var(--text-1)',
+                        }}
+                      >
+                        {exp.role}
+                      </h3>
+                      <div
+                        className="flex items-center gap-2 text-sm"
+                        style={{ color: 'var(--text-2)' }}
+                      >
+                        <span>{exp.company}</span>
+                        <span style={{ color: 'var(--text-3)' }}>·</span>
+                        <span>{exp.location}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-end gap-2">
+                      <span
+                        className="badge"
+                        style={
+                          exp.type === 'Full-time'
+                            ? {
+                                background: 'var(--accent-dim)',
+                                border:     '1px solid var(--accent-dim)',
+                                color:      'var(--accent)',
+                              }
+                            : {
+                                background: 'var(--bg-2)',
+                                border:     '1px solid var(--border)',
+                                color:      'var(--text-2)',
+                              }
+                        }
+                      >
+                        <span
+                          className="w-1.5 h-1.5 rounded-full"
+                          style={{ background: exp.type === 'Full-time' ? 'var(--accent)' : 'var(--text-3)' }}
+                        />
+                        {exp.type}
+                      </span>
+                      <span
+                        className="text-xs font-medium"
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                          color:      exp.current ? 'var(--accent)' : 'var(--text-3)',
+                        }}
+                      >
+                        {exp.period}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="divider mb-5" />
+
+                  {/* Points */}
+                  <ul className="flex flex-col gap-3 mb-6">
+                    {exp.points.map((point, pi) => (
+                      <li key={pi} className="flex gap-3 items-start">
+                        <span
+                          className="mt-2 w-1 h-1 rounded-full shrink-0"
+                          style={{ background: 'var(--accent)' }}
+                        />
+                        <span
+                          className="text-sm leading-7"
+                          style={{ color: 'var(--text-2)' }}
+                        >
+                          {point}
+                        </span>
                       </li>
                     ))}
                   </ul>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Education */}
-          <div>
-            <p className="gs-mono" style={{ fontSize: '0.62rem', letterSpacing: '0.15em', color: 'var(--text-faint)', textTransform: 'uppercase', marginBottom: '2rem', borderBottom: '2px solid var(--border)', paddingBottom: '0.6rem' }}>Education</p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              {edu.map((e, i) => (
-                <div key={i} className="hover-lift" style={{ border: '2px solid var(--border)', padding: '1.5rem', background: 'var(--bg)', cursor: 'default', transition: 'all 0.2s' }}
-                  onMouseEnter={ev => (ev.currentTarget.style.borderColor = 'var(--accent)')}
-                  onMouseLeave={ev => (ev.currentTarget.style.borderColor = 'var(--border)')}
-                >
-                  <p className="gs-mono" style={{ fontSize: '0.68rem', color: 'var(--accent)', marginBottom: '0.4rem', letterSpacing: '0.08em' }}>{e.yr}</p>
-                  <h3 className="gs-display" style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.25rem', lineHeight: 1.3 }}>{e.deg}</h3>
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{e.inst}</p>
+                  {/* Stack */}
+                  <div className="flex flex-wrap gap-2">
+                    {exp.stack.map((tech, ti) => (
+                      <span
+                        key={ti}
+                        className="badge badge-muted text-xs"
+                        style={{
+                          fontFamily: 'var(--font-mono)',
+                        }}
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-
         </div>
+
       </div>
     </section>
   );
