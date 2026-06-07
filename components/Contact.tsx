@@ -73,7 +73,7 @@ export default function Contact() {
                 </span>{' '}
                 with a minimum of{' '}
                 <span className="font-bold" style={{ color: 'var(--text-1)' }}>
-                  24 LPA
+                  12 LPA
                 </span>
                 . Immediately available for remote — 1–2 months notice for on-site.
               </p>
