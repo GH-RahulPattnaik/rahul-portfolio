@@ -6,7 +6,7 @@ const contactLinks = [
   {
     label: 'Email',
     value: 'rpattnaik2001@gmail.com',
-    href:  'mailto:rpattnaik2001@gmail.com',
+    href:  'https://mail.google.com/mail/?view=cm&to=rpattnaik2001@gmail.com&su=Hello Rahul&body=Hi Rahul, I came across your portfolio and would like to connect.',
     icon:  '✉',
   },
   {
@@ -73,7 +73,7 @@ export default function Contact() {
                 </span>{' '}
                 with a minimum of{' '}
                 <span className="font-bold" style={{ color: 'var(--text-1)' }}>
-                  12 LPA
+                  24 LPA
                 </span>
                 . Immediately available for remote — 1–2 months notice for on-site.
               </p>
@@ -113,7 +113,9 @@ export default function Contact() {
             {/* CTA buttons */}
             <div className="flex gap-3 flex-wrap">
               <a
-                href="mailto:rpattnaik2001@gmail.com"
+                href="https://mail.google.com/mail/?view=cm&to=rpattnaik2001@gmail.com&su=Hello Rahul&body=Hi Rahul, I came across your portfolio and would like to connect."
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn btn-solid"
               >
                 Send Email ↗
